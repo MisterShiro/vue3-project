@@ -1,12 +1,20 @@
 <template>
+  <p>====================app=========================</p>
   <p>ref:{{ name }}</p>
   <p>reactive:{{ person.name }}</p>
   <p>computed:{{ plusOne }}</p>
   <button @click="setValut">操作1</button>
+  <p>====================components=========================</p>
+  <router-view />
+  <p>======================directive ======================</p>
+  <div v-move="{ color: 'red' }" class="testColor">自定义指令</div>
+  <!-- <div v-move-directive class="testColor">自定义指令</div> -->
 </template>
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import hook from './hooks/test';
 import {
+  computed,
+  watch,
   onBeforeMount,
   onBeforeUnmount,
   onBeforeUpdate,
@@ -16,6 +24,44 @@ import {
   reactive,
   ref,
 } from 'vue';
+import { RouterView } from 'vue-router';
+
+// hook
+const hookeData = hook;
+hookeData();
+
+// 自定义指令
+const vMove = (el: any, binding: any) => {
+  console.log('指令', el, binding);
+  el.style.background = 'red';
+};
+/* const vMoveDirective = {
+  created: () => {
+    console.log('初始化====>');
+  },
+  beforeMount() {
+    // 在元素上做些操作
+    console.log('初始化一次=======>');
+  },
+  mounted(el: any, dir: any) {
+    el.style.background = dir.value.background;
+    console.log('初始化========>');
+  },
+  beforeUpdate() {
+    console.log('更新之前');
+  },
+  updated() {
+    console.log('更新结束');
+  },
+  beforeUnmount(...args: Array<any>) {
+    console.log(args);
+    console.log('======>卸载之前');
+  },
+  unmounted(...args: Array<any>) {
+    console.log(args);
+    console.log('======>卸载完成');
+  },
+}; */
 // ref
 const name = ref<String>('张三');
 // reactive
@@ -48,6 +94,7 @@ function setValut() {
   name.value = '王五';
 }
 
+// 切换组件
 onBeforeMount(() => {
   console.log('onBeforeMount================>');
 });
